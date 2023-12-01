@@ -38,7 +38,6 @@ function eventListeners() {
     horaInput.addEventListener('change', datosCita);
     comentarioInput.addEventListener('change', datosCita);
 }
-
 const citaObj = {
     producto: '',
     colaborador: '',
@@ -126,7 +125,7 @@ class UI {
         objectStore.openCursor().onsuccess = function(e){
             const cursor = e.target.result;
             if(cursor){
-                const {producto, colaborador, cantidad, fecha, hora, sintomas, id } = cursor.value;
+                const {producto, colaborador, cantidad, fecha, hora, comentario, id } = cursor.value;
 
                 
 
@@ -153,8 +152,8 @@ class UI {
             const horaParrafo = document.createElement('p');
             horaParrafo.innerHTML = `<span class="font-weight-bolder">Hora: </span> ${hora}`;
 
-            const sintomasParrafo = document.createElement('p');
-            sintomasParrafo.innerHTML = `<span class="font-weight-bolder">Comentario: </span> ${sintomas}`;
+            const comentarioParrafo = document.createElement('p');
+            comentarioParrafo.innerHTML = `<span class="font-weight-bolder">Comentario: </span> ${comentario}`;
 
             // Agregar un botón de eliminar...
             const btnEliminar = document.createElement('button');
@@ -176,7 +175,7 @@ class UI {
             divCita.appendChild(cantidadParrafo);
             divCita.appendChild(fechaParrafo);
             divCita.appendChild(horaParrafo);
-            divCita.appendChild(sintomasParrafo);
+            divCita.appendChild(comentarioParrafo);
             divCita.appendChild(btnEliminar)
             divCita.appendChild(btnEditar)
 
@@ -214,12 +213,12 @@ ui.mostrarCitas;
 function nuevaCita(e) {
     e.preventDefault();
 
-    const {producto, colaborador, cantidad, fecha, hora, sintomas } = citaObj;
+    const {producto, colaborador, cantidad, fecha, hora, comentario } = citaObj;
 
     
 
     // Validar
-    if( producto === '' || colaborador === '' || cantidad === '' || fecha === ''  || hora === '' || sintomas === '' ) {
+    if( producto === '' || colaborador === '' || cantidad === '' || fecha === ''  || hora === '' || comentario === '' ) {
         ui.imprimirAlerta('Todos los mensajes son Obligatorios', 'error')
 
         return;
@@ -299,7 +298,7 @@ function reiniciarObjeto() {
     citaObj.cantidad = '';
     citaObj.fecha = '';
     citaObj.hora = '';
-    citaObj.sintomas = '';
+    citaObj.comentario = '';
 }
 
 
@@ -325,7 +324,7 @@ function eliminarCita(id) {
 
 function cargarEdicion(cita) {
 
-    const {producto, colaborador, cantidad, fecha, hora, sintomas, id } = cita;
+    const {producto, colaborador, cantidad, fecha, hora, comentario, id } = cita;
 
     // Reiniciar el objeto
     citaObj.producto = producto;
@@ -333,7 +332,7 @@ function cargarEdicion(cita) {
     citaObj.cantidad = cantidad;
     citaObj.fecha = fecha
     citaObj.hora = hora;
-    citaObj.sintomas = sintomas;
+    citaObj.comentario = comentario;
     citaObj.id = id;
 
     // Llenar los Inputs
@@ -342,7 +341,7 @@ function cargarEdicion(cita) {
     cantidadInput.value = cantidad;
     fechaInput.value = fecha;
     horaInput.value = hora;
-    sintomasInput.value = sintomas;
+    comentarioInput.value = comentario;
 
     formulario.querySelector('button[type="submit"]').textContent = 'Guardar Cambios';
 
@@ -381,7 +380,7 @@ function crearDB() {
         objectStore.createIndex('cantidad', 'cantidad', {unique: false});
         objectStore.createIndex('fecha', 'fecha', {unique: false});
         objectStore.createIndex('hora', 'hora', {unique: false});
-        objectStore.createIndex('sintomas', 'sintomas', {unique: false});
+        objectStore.createIndex('comentario', 'comentario', {unique: false});
         objectStore.createIndex('id', 'id', {unique: true});
         console.log('DB creada y lista');
     }
