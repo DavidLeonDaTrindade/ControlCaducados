@@ -18,7 +18,8 @@ const heading = document.querySelector('#administra');
 
 
 let editando = false;
-
+let productosActuales = [];
+const productosCaducados = [];
 
 window.onload = () =>{
     eventListeners();
@@ -395,6 +396,30 @@ function mostrarResultado(producto, descuento) {
     // Agrega el elemento al div con ID 'resultado'
     const divResultado = document.getElementById('resultado');
     divResultado.appendChild(resultadoElemento);
+    //Almacena el producto actual en la variable global
+    productosActuales.push(producto);
+}
+//Función para determinar si un producto esta caducado o no
+function esProductoCaducado(fechaCaducidad) {
+    const fechaHoy = new Date();
+    const diasDiferencia = Math.ceil((fechaCaducidad - fechaHoy) / (1000 * 60 * 60 * 24));
+    
+    return diasDiferencia < 0;
+}
+//Función para elimiar el producto
+function eliminarProducto(id) {
+    const transaction = DB.transaction(['citas'], 'readwrite');
+    const objectStore = transaction.objectStore('citas');
+    objectStore.delete(Number(id));
+
+    transaction.oncomplete = () => {
+        console.log(`Producto ${id} eliminado de la base de datos.`);
+        ui.imprimirCitas();  // Actualizar la UI después de eliminar
+    };
+
+    transaction.onerror = () => {
+        console.error(`Error al eliminar el producto ${id}.`);
+    };
 }
 
 //Función para filtrar productos con descuento
@@ -405,15 +430,20 @@ function filtrarProducto(descuento) {
     const listaProductos = document.querySelectorAll('#citas div.cita');
     // Limpiamos el contenido actual del div resultado
     document.getElementById('resultado').innerHTML = "";
+    //Creamos un objeto para almacenar los productos con descuento
+    const productoConDescuento = [];
     // Iteramos sobre la lista de productos
     listaProductos.forEach((producto) => {
         const fechaCaducidad = new Date(producto.dataset.fecha);
         // Calcular la diferencia en días entre la fecha de hoy y la fecha de caducidad
         const diasDiferencia = Math.ceil((fechaCaducidad - fechaHoy) / (1000 * 60 * 60 * 24));
-
         // Determinar el descuento según la diferencia de días
         let productoDescuento = 0;
-
+        if(esProductoCaducado(fechaCaducidad)){
+            //Si el producto esta caducado eliminarlo de la base de datos
+            eliminarProducto(producto.dataset.id);
+            productosCaducados.push(producto);
+        }
         if (diasDiferencia <= 90 && diasDiferencia > 60) {
             productoDescuento = 30;
         } else if (diasDiferencia <= 60 && diasDiferencia > 30) {
@@ -422,13 +452,45 @@ function filtrarProducto(descuento) {
             productoDescuento = 70;
         } else if (diasDiferencia <= 7) {
             productoDescuento = 90;
+        }else if(diasDiferencia < 0){
+            //El producto esta caducado
+            productosCaducados.push(producto);
         }
 
         // Verificar si hay descuento y mostrar el resultado
         if (productoDescuento === descuento) {
             mostrarResultado(producto, productoDescuento);
+            //Almacenar el producto con descuento en el array
+            productoConDescuento.push(producto);
         }
     });
+    
+}
+
+//Función para generar el PDF
+function generarPDF(productoConDescuento) {
+    //Crear un nuevo objeto jsPDF
+    const doc = new jsPDF();
+
+    //Titulo del PDF
+    doc.text('Lista de Productos con Descuento', 20, 10);
+    //Iterar sobre los productos con descuento y agregar al PDF
+    productoConDescuento.forEach((producto, index) => {
+        const nombreProducto = producto.querySelector('h2').textContent;
+        const cantidadProducto = producto.querySelector('p:nth-of-type(2)').textContent.split(':')[1].trim(); // Obtener la cantidad del tercer párrafo
+        const contenido = `${index + 1}. ${nombreProducto} - Cantidad: ${cantidadProducto}`;
+        //Agregar cada producto al PDF en una nueva linea
+        doc.text(contenido, 20, 20 + index * 10);
+    });
+    //Guardar el PDF como un blob y generar un enlace de descarga
+    const blob = doc.output('blob');
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'lista_productos_descuento.pdf';
+    a.click();
+    //Limpiamos la variable de productosActuales después de generar el PDF
+    productosActuales = [];
 }
 
 
@@ -436,25 +498,36 @@ function filtrarProducto(descuento) {
 const boton1 = document.getElementById("boton1");
 //Añadimos la funcionalidad al boton 1 para que filtre segun nuestras necesidades
 boton1.addEventListener("click", function(){
-    
+    productosActuales = [];
     filtrarProducto(30);
 });
 //Hacemos el mismo proceso con los otros dos botones
 const boton2 = document.getElementById("boton2");
 boton2.addEventListener("click", function () {
     console.log("pulsando el boton2");
+    productosActuales = [];
     filtrarProducto(50);
 });
 //Boton 3
 const boton3 = document.getElementById("boton3");
 boton3.addEventListener("click", function () {
     console.log("pulsando el boton3");
+    productosActuales = [];
     filtrarProducto(70);
 });
 //Botón 4
-//Boton 3
 const boton4 = document.getElementById("boton4");
 boton4.addEventListener("click", function () {
     console.log("pulsando el boton4");
+    productosActuales = [];
     filtrarProducto(90);
 });
+const botonGenerarPDF = document.getElementById('generarPDF');
+botonGenerarPDF.addEventListener('click', function(){
+    generarPDF(productosActuales);
+})
+const btnProductosCaducados = document.getElementById('btnProductosCaducados');
+btnProductosCaducados.addEventListener('click', function(){
+    filtrarProducto();
+    generarPDF(productosCaducados);
+})

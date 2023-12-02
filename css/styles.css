@@ -5,7 +5,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  background-image: linear-gradient(-225deg, #A445B2 0%, #D41872 52%, #FF0066 100%);
+  background:red;
   min-height: 100%;
   padding-bottom: 5rem;
 }
@@ -57,31 +57,46 @@ footer{
 }
 #boton1{
   background-color: green;
-  width: 20%;
+  width: 15%;
   height: 40px;
   border-radius: 10px;
   color: white;
 }
 #boton2{
   background-color: orange;
-  width: 20%;
+  width: 15%;
   height: 40px;
   border-radius: 10px;
   color: white;
 }
 #boton3{
   background-color: red;
-  width: 20%;
+  width: 15%;
+  height: 40px;
+  border-radius: 10px;
+  color: whit15
+}
+#boton4{
+  background-color: black;
+  width: 15%;
   height: 40px;
   border-radius: 10px;
   color: white;
 }
-#boton4{
-  background-color: black;
-  width: 20%;
+#generarPDF{
+  background-color: white;
+  width: 15%;
   height: 40px;
   border-radius: 10px;
-  color: white;
+  color: black;
+}
+#btnProductosCaducados{
+  background-color: darkgrey;
+  width: 15%;
+  height: 40px;
+  border-radius: 10px;
+  
+
 }
 #resultado{
   background-color: aliceblue;
