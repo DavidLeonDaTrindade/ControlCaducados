@@ -444,11 +444,11 @@ function filtrarProducto(descuento) {
             eliminarProducto(producto.dataset.id);
             productosCaducados.push(producto);
         }
-        if (diasDiferencia <= 90 && diasDiferencia > 60) {
+        if (diasDiferencia <= 60 && diasDiferencia > 30) {
             productoDescuento = 30;
-        } else if (diasDiferencia <= 60 && diasDiferencia > 30) {
+        } else if (diasDiferencia <= 30 && diasDiferencia > 21) {
             productoDescuento = 50;
-        } else if (diasDiferencia <= 30 && diasDiferencia > 7) {
+        } else if (diasDiferencia <= 21 && diasDiferencia > 7) {
             productoDescuento = 70;
         } else if (diasDiferencia <= 7) {
             productoDescuento = 90;
