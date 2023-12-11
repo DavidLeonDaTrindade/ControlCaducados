@@ -9,7 +9,10 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <h2 class="text-center my-5 titulo">Control Caducados Kiwoko</h2>
+    <h2 class="text-center my-5 titulo-container">
+        <span class="titulo">Control Caducados Kiwoko</span>
+        <img src="imagenes/KIWOKO.png" alt="Logo" class="logo">
+    </h2>
     <div class="container mt-5 p-5">
         <div id="contenido" class="row">
             <div class="col-md-6 agregar-cita">
@@ -60,7 +63,13 @@
             </div>
             <div class="col-md-6">
                 <h2 id="administra" class="mb-4">Administra tus productos</h2>
-                <ul id="citas" class="list-group lista-citas"></ul>
+                <!-- Contenedor para el botón y la lista -->
+                <div id="citas-container" class="d-flex justify-content-between">
+                    <!-- Lista de citas -->
+                    <ul id="citas" class="list-group lista-citas"></ul>
+                    <!-- Botón que se despliega hacia abajo -->
+                    <button id="toggleCitas" class="btn btn-primary mb-3">Mostrar Productos</button>
+                </div>
             </div>
         </div> <!--.row-->
     </div><!--.container-->

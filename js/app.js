@@ -539,9 +539,20 @@ boton4.addEventListener("click", function () {
 const botonGenerarPDF = document.getElementById('generarPDF');
 botonGenerarPDF.addEventListener('click', function(){
     generarPDF(productosActuales);
-})
+});
 const btnProductosCaducados = document.getElementById('btnProductosCaducados');
 btnProductosCaducados.addEventListener('click', function(){
     filtrarProducto();
     generarPDF(productosCaducados);
-})
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const toggleCitasBtn = document.getElementById('toggleCitas');
+    const citasList = document.getElementById('citas');
+
+    toggleCitasBtn.addEventListener('click', function () {
+        // Alternar la visibilidad de la lista
+        citasList.style.display = citasList.style.display === 'none' ? 'block' : 'none';
+    });
+});
+
