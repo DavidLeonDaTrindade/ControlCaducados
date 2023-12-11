@@ -553,6 +553,10 @@ document.addEventListener('DOMContentLoaded', function () {
     toggleCitasBtn.addEventListener('click', function () {
         // Alternar la visibilidad de la lista
         citasList.style.display = citasList.style.display === 'none' ? 'block' : 'none';
+        // Cambiar el texto del botón
+        const buttonText = citasList.style.display === 'none' ? 'Mostrar Productos' : 'Ocultar Productos';
+        toggleCitasBtn.textContent = buttonText;
     });
 });
+
 
