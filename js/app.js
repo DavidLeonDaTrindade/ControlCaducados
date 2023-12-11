@@ -289,7 +289,21 @@ function nuevaCita(e) {
 
     // Reiniciar Formulario
     formulario.reset();
-
+//Codigo para la base de datos
+    fetch('http://localhost:3000/api/citas', {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(citaObj),
+})
+    .then((response) => response.json())
+    .then((data) => {
+    console.log(data); // Puedes manejar la respuesta del servidor aquí
+})
+    .catch((error) => {
+    console.error('Error al enviar la solicitud:', error);
+});
 }
 
 function reiniciarObjeto() {
