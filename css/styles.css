@@ -120,6 +120,6 @@ footer{
       transform: translateX(0);
   }
   100% {
-      transform: translateX(1500px); /* Ajusta la distancia hacia la derecha según tus preferencias */
+      transform: translateX(900px); /* Ajusta la distancia hacia la derecha según tus preferencias */
   }
 }
